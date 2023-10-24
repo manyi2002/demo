@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <base th:href="@{/}" href="/bookstore/"/>
+    <link rel="stylesheet" href="static/css/minireset.css" />
+    <link rel="stylesheet" href="static/css/common.css" />
+    <link rel="stylesheet" href="static/css/cart.css" />
+    <link rel="stylesheet" href="static/css/bookManger.css" />
+    <link rel="stylesheet" href="static/css/orderManger.css" />
+  </head>
+  <body>
+    <div class="header">
+      <div class="w">
+        <div class="header-left">
+          <a href="index">
+            <img src="static/img/logo.gif" alt=""
+          /></a>
+          <h1>订单管理系统</h1>
+        </div>
+        <div class="header-right">
+          <h3>欢迎<span class="um_span">Admin</span>光临书城</h3>
+          <a href="protected/bookManager?method=showBookList" class="order">图书管理</a>
+          <a href="orderManager?method=showOrderList" class="destory">订单管理</a>
+          <a href="index" class="gohome">返回商城</a>
+        </div>
+      </div>
+    </div>
+    <div class="list">
+      <div class="w">
+        <div class="add">
+          <a href="orderManager?method=toAddOrderPage">添加订单</a>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>订单号</th>
+              <th>订单日期</th>
+              <th>订单金额</th>
+              <th>订单数量</th>
+              <th>订单详情</th>
+              <th>发货状态</th>
+            </tr>
+          </thead>
+          <tbody th:if="${#lists.isEmpty(orderList)}">
+          <tr>
+            <td colspan="7">订单列表为空！！！</td>
+          </tr>
+          </tbody>
+          <tbody th:unless="${#lists.isEmpty(orderList)}">
+          <tr th:each="order : ${orderList}">
+            <td th:text="${order.orderSequence}">67051a55-1274-4c80-b12b-0ab16fd09716</td>
+            <td th:text="${order.createTime}">
+              2022/12/26
+            </td>
+            <td th:text="${order.totalAmount}">110</td>
+            <td th:text="${order.totalCount}">200</td>
+            <td><a th:href="@{protected/orderClient(method='detailInformation',orderId=${order.orderId})}">查看详情</a></td>
+            <td th:if="${order.orderStatus eq 0}">
+              <a class="send">未发货</a>
+            </td>
+            <td th:if="${order.orderStatus eq 1}">
+              <a th:href="@{protected/orderClient(method='toEditPage1',orderId=${order.orderId})}" style="color: orange">已发货</a>
+            </td>
+            <td th:if="${order.orderStatus eq 2}">
+              <a>已收货</a>
+            <td>
+              <a th:href="@{/orderManager(method='toEditOrderPage',id=${order.orderId})}">修改</a>
+              <a th:href="@{/orderManager(method='removeOrder',id=${order.orderId})}" class="del">删除</a>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <div class="footer">
+          <div class="footer-right">
+            <!--
+            <div><span th:onclick="|Page(1)|">首页</span></div>
+            <div><span th:onclick="|Page(${ session.pageNo -1})|">上一页</span></div>
+            <ul>
+              <li><span th:text="${session.pageNo -1}" th:hidden="${session.pageNo==1}"></span></li>
+              <li class="active"><span th:text="${session.pageNo}"></span></li>
+              <li><span th:text="${session.pageNo +1}" th:hidden="${session.pageNo==session.pageCount}"></span></li>
+            </ul>
+            <div> <span th:onclick="|Page(${session.pageNo+1})|">下一页</span></div>
+            <div><span th:onclick="|Page(${session.pageCount})|">末页</span></div>
+            <span>共</span><span th:text="${session.pageCount}"></span><span>页</span>
+            -->
+            <span>共</span><span th:text="${session.cCount}"></span><span>条记录</span>
+            <!--
+            <span>到第</span>
+            <input type="text" id="pageText" th:value="${session.pageNo}">
+            <span>页</span>
+            <button id="but" onclick="Jump()">确定</button>
+            -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom">
+      <div class="w">
+        <div class="top">
+          <ul>
+            <li>
+              <a href="">
+                <img src="static/img/bottom1.png" alt="" />
+                <span>大咖级讲师亲自授课</span>
+              </a>
+            </li>
+            <li>
+              <a href="">
+                <img src="static/img/bottom.png" alt="" />
+                <span>课程为学员成长持续赋能</span>
+              </a>
+            </li>
+            <li>
+              <a href="">
+                <img src="static/img/bottom2.png" alt="" />
+                <span>学员真是情况大公开</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="content">
+          <dl>
+            <dt>关于我们</dt>
+            <dd>教育理念</dd>
+            <!-- <dd>名师团队</dd>
+            <dd>学员心声</dd> -->
+          </dl>
+          <dl>
+            <dt>资源下载</dt>
+            <dd>视频下载</dd>
+            <!-- <dd>资料下载</dd>
+            <dd>工具下载</dd> -->
+          </dl>
+          <dl>
+            <dt>加入我们</dt>
+            <dd>招聘岗位</dd>
+            <!-- <dd>岗位介绍</dd>
+            <dd>招贤纳师</dd> -->
+          </dl>
+          <dl>
+            <dt>联系我们</dt>
+            <dd>https://www.drimwai.com</dd>
+            <dd></dd>
+          </dl>
+        </div>
+      </div>
+      <div class="down">
+        Drimwai's Bookstore.Copyright ©2021
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base th:href="@{/}" href="/bookstore/"/>
+    <title>Document</title>
+    <script src="static/script/jquery-1.8.3.js"></script>
+    <link rel="stylesheet" href="static/css/minireset.css" />
+    <link rel="stylesheet" href="static/css/common.css" />
+    <link rel="stylesheet" href="static/css/style.css" />
+    <link rel="stylesheet" href="static/css/cart.css" />
+    <link rel="stylesheet" href="static/css/bookManger.css" />
+    <link rel="stylesheet" href="static/css/register.css" />
+    <link rel="stylesheet" href="static/css/book_edit.css" />
+  </head>
+  <body>
+    <div class="header">
+      <div class="w">
+        <div class="header-left">
+          <a href="index.html">
+            <img src="static/img/logo.gif" alt=""
+          /></a>
+          <h1>编辑图书</h1>
+        </div>
+        <div class="header-right">
+<!--          <div><a href="protected/bookManager?method=showBookList" class="order">图书管理</a></div>-->
+<!--          <a href="pages/book_manager.html" class="order">图书管理</a>-->
+<!--          <a th:href="protected/OrderClientServlet?method=orderManger" >订单管理</a>-->
+            <div class="order"><a href="protected/orderClient?method=orderManage" class="destory">返回订单</a></div>
+<!--          <a href="pages/order_manager.html" class="destory">订单管理</a>-->
+<!--          <div><a href="index.html" class="gohome">返回商城</a></div>-->
+        </div>
+      </div>
+    </div>
+    <div class="login_banner">
+      <div class="register_form" style="overflow-y:scroll;">
+<!--        修改订单的表单-->
+        <form action="protected/orderClient?method=saveOrUpdateOrder" method="post" th:if="${order !=null}">
+          <div class="form-item">
+<!--              使用隐藏域绑定bookId-->
+            <input type="hidden" name="orderId" th:value="${order.orderId}" />
+            <input type="hidden" name="userId" th:value="${order.userId}" />
+            <div>
+              <label>订单编号:</label>
+              <input type="text" th:value="${order.orderSequence}" placeholder="请输入编号" name="orderSequence" readonly=“readonly”/>
+            </div>
+            <span class="errMess" style="visibility: hidden;" >请输入正确的编号</span>
+          </div>
+          <div class="form-item">
+            <div>
+              <label>创建时间:</label>
+              <input type="text" th:value="${order.createTime}" placeholder="请输入创建时间" name="createTime" readonly=“readonly”/>
+            </div>
+            <span class="errMess">请输入正确时间</span>
+          </div>
+          <div class="form-item">
+            <div>
+              <label>金额:</label>
+              <input type="number" th:value="${order.totalAmount}" placeholder="请输入金额" name="totalAmount" readonly=“readonly”/>
+            </div>
+            <span class="errMess">请输入正确金额</span>
+          </div>
+          <div class="form-item">
+            <input id="orderStatus" type="hidden" th:value="${order.orderStatus}" />
+            <div>
+              <label>当前状态:</label>
+                <a style="visibility: hidden" id="aaa" onclick="click1()" ></a>
+              <select id="opS" name="orderStatus" style="width: 260px;height: 30px;border-color: #cccccc">
+                <option value="1" >已发货</option>
+                <option value="2" >已收货</option>
+              </select>
+            </div>
+            <span class="errMess">0表示未发货，1表示已发货，2表示已收货</span>
+          </div>
+          <div class="form-item">
+            <div>
+              <label>订单数量:</label>
+              <input type="number" th:value="${order.totalCount}" placeholder="请输入订单的数量" name="totalCount" readonly=“readonly”/>
+            </div>
+            <span class="errMess">请输入正确的订单数量</span>
+          </div>
+
+          <div class="form-item">
+            <div>
+              <label>用户名:</label>
+              <input type="text" th:value="${order.userName}" placeholder="请输入用户名" name="userName" readonly=“readonly”/>
+            </div>
+            <span class="errMess">请输入正确用户名</span>
+          </div>
+          <div style="padding-bottom: 5px">
+            <div>
+              <button type="submit" class="btn">提交</button>
+            </div>
+          </div>
+        </form>
+
+      </div>
+    </div>
+    <div class="bottom">
+      Nick's Bookstore.Copyright ©2021
+    </div>
+    <script type="text/javascript">
+        // 进入页面立即触发,修改订单状态
+        (()=>{
+            // 兼容IE
+            if(document.all) {
+                document.getElementById("aaa").click();
+            }
+            // 兼容其它浏览器
+            else {
+                var e = document.createEvent("MouseEvents");
+                e.initEvent("click", true, true);
+                document.getElementById("aaa").dispatchEvent(e);
+            }
+        })();
+
+        function click1() {
+            var options=$("#opS option:selected");
+            // alert(options.val());//获取value
+            // alert(options.text());//获取文本
+            var orderStatus = document.getElementById("orderStatus").value;
+            $("#opS").val(orderStatus);
+        }
+    </script>
+  </body>
+</html>

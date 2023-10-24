@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+<meta charset="UTF-8">
+<title>后台管理</title>
+	<base th:href="@{/}" href="/bookstore/"/>
+<link type="text/css" rel="stylesheet" href="static/css/style.css" >
+<style type="text/css">
+	h1 {
+		text-align: center;
+		margin-top: 200px;
+	}
+</style>
+	<!-- 引入vue -->
+	<script src="static/script/vue.js" type="text/javascript" charset="utf-8"></script>
+	<!-- 引入axios -->
+	<script src="static/script/axios.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+	
+	<div id="header">
+			<img class="logo_img" alt="" src="static/img/logo.gif" >
+			<span class="wel_word">后台管理系统</span>
+			<div>
+				<a href="protected/bookManager?method=showBookList">图书管理</a>
+				<a href="order_manager.html">订单管理</a>
+				<a href="index.html">返回商城</a>
+			</div>
+	</div>
+	
+	<div id="main">
+		<h1>欢迎管理员进入后台管理系统</h1>
+	</div>
+	
+	<div id="bottom">
+		<span>
+			Drimwai's Bookstore.Copyright &copy;2021
+		</span>
+	</div>
+
+	<!-- vue代码 -->
+	<script>
+		var vue = new Vue({
+			"el":"#app",
+			"data":{
+				"admin":{
+					"totalCount":0,
+					"totalAmount":0,
+					"cartItemList":[]
+				}
+			},
+			"methods":{
+				showAdmin(){
+					//发送异步请求获取购物车的信息
+					axios({
+						"method":"post",
+						"url":"protected/manager",
+						"params":{
+							"method":"getAdminJSON"
+						}
+					}).then(response => {
+						if (response.data.flag){
+						this.cart = response.data.resultData
+					} else {
+							location.href = "user?method=toLoginPage"
+							//说明显示购物车信息失败
+							alert("显示后台管理信息失败")
+						}
+					}
+				})
+		},
+			created(){
+				//钩子函数，在这个钩子函数中就能使用数据模型
+				this.showAdmin()
+			}
+		});
+
+	</script>
+</body>
+</html>

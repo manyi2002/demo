@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <base th:href="@{/}" href="/bookstore/"/>
+    <link rel="stylesheet" href="static/css/minireset.css" />
+    <link rel="stylesheet" href="static/css/common.css" />
+    <link rel="stylesheet" href="static/css/style.css" />
+    <link rel="stylesheet" href="static/css/cart.css" />
+    <link rel="stylesheet" href="static/css/bookManger.css" />
+    <link rel="stylesheet" href="static/css/register.css" />
+    <link rel="stylesheet" href="static/css/book_edit.css" />
+  </head>
+  <body>
+    <div class="header">
+      <div class="w">
+        <div class="header-left">
+          <a href="index.html">
+            <img src="static/img/logo.gif" alt=""
+          /></a>
+          <h1>编辑图书</h1>
+        </div>
+        <div class="header-right">
+          <a href="bookManager?method=showBookList">图书管理</a>
+          <a href="orderManager?method=showOrderList" class="destory">订单管理</a>
+          <a href="index.html" class="gohome">返回商城</a>
+        </div>
+      </div>
+    </div>
+    <div class="login_banner">
+      <div class="register_form">
+        <form action="orderManager?method=saveOrUpdateOrder" method="post" th:if="${order != null}">
+          <div class="form-item">
+            <!--使用隐藏域绑定orderId-->
+            <input type="hidden" name="orderId" th:value="${order.orderId}"/>
+            <div>
+              <label>订单号:</label>
+              <input type="text" th:value="${order.orderSequence}" placeholder="请输入订单号" name="orderSequence" />
+            </div>
+            <span class="errMess" style="visibility: hidden;">请输入正确的订单号</span
+            >
+          </div>
+          <div class="form-item">
+            <div>
+              <label>订单金额:</label>
+              <input type="text" th:value="${order.totalAmount}" placeholder="请输入订单金额" name="totalAmount" />
+            </div>
+            <span class="errMess">请输入正确数字</span>
+          </div>
+          <div class="form-item">
+            <div>
+              <label>订单数量:</label>
+              <input type="number" th:value="${order.totalCount}" placeholder="请输入订单数量" name="totalCount"/>
+            </div>
+            <span class="errMess">请输入正确数字</span>
+          </div>
+          <div class="form-item">
+            <div>
+              <label>发货状态:</label>
+              <input type="number" th:value="${order.orderStatus}" placeholder="请输入发货状态" name="orderStatus" />
+            </div>
+            <span class="errMess">请输入正确发货状态</span>
+          </div>
+
+          <button type="submit" class="btn">提交</button>
+        </form>
+
+        <!--这是添加订单的表单-->
+        <form action="orderManager?method=saveOrUpdateOrder" method="post" th:unless="${order != null}">
+          <div class="form-item">
+            <div>
+              <label>订单号:</label>
+              <input type="text" placeholder="请输入订单号" name="orderSequence" />
+            </div>
+            <span class="errMess" style="visibility: hidden;">请输入正确的订单号</span>
+          </div>
+          <div class="form-item">
+            <div>
+              <label>订单金额:</label>
+              <input type="text"  placeholder="请输入订单金额" name="totalAmount" />
+            </div>
+            <span class="errMess">请输入正确数字</span>
+          </div> <div class="form-item">
+          <div>
+            <label>订单数量:</label>
+            <input type="number"  placeholder="请输入订单数量" name="totalCount"/>
+          </div>
+          <span class="errMess">请输入正确数字</span>
+        </div>
+          <div class="form-item">
+            <div>
+              <label>发货状态:</label>
+              <input type="number"  placeholder="请输入发货状态" name="orderStatus" />
+            </div>
+            <span class="errMess">请输入正确发货状态</span>
+          </div>
+
+
+          <button type="submit" class="btn">提交</button>
+        </form>
+      </div>
+    </div>
+    <div class="bottom">
+      Drimwai's Bookstore.Copyright ©2021
+    </div>
+  </body>
+</html>

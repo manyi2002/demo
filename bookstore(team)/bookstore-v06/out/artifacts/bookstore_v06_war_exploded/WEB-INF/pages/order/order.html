@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>我的订单</title>
+    <base th:href="@{/}" href="/bookstore/"/>
+    <script src="static/script/vue.js"></script>
+    <link rel="stylesheet" href="static/css/minireset.css" />
+    <link rel="stylesheet" href="static/css/common.css" />
+    <link rel="stylesheet" href="static/css/cart.css" />
+    <link rel="stylesheet" href="static/css/bookManger.css" />
+    <link rel="stylesheet" href="static/css/orderManger.css" />
+  </head>
+  <body>
+    <div class="header">
+      <div class="w">
+        <div class="header-left">
+          <a href="index">
+            <img src="static/img/logo.gif" alt=""
+          /></a>
+          <h1>我的订单</h1>
+        </div>
+        <div class="header-right">
+          <h3>欢迎<span class="um_span" th:text="${session.loginUser.userName}">Drimwai</span>光临书城</h3>
+          <div class="order"><a href="protected/orderClient?method=orderManage">我的订单</a></div>
+          <div class="destory"><a href="user?method=logout">注销</a></div>
+          <div class="gohome">
+            <a href="protected/cart?method=toCartPage">返回</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="list" th:if="${#lists.isEmpty(list_order)}">
+      您当前没有订单！！！
+    </div>
+    <div class="list" th:unless="${#lists.isEmpty(list_order)}">
+      <div class="w">
+        <table>
+          <thead>
+          <tr>
+            <th>订单号</th>
+            <th>订单日期</th>
+            <th>订单金额</th>
+            <th>订单数量</th>
+            <th>订单状态</th>
+            <th>订单详情</th>
+            <th>修改订单</th>
+            <th>删除订单</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="order:${list_order}">
+            <td th:text="${order.orderSequence}">12354456895</td>
+            <td th:text="${order.createTime}">2015.04.23</td>
+            <td th:text="${order.totalAmount}">90.00</td>
+            <td th:text="${order.totalCount}">88</td>
+            <!--              <td><a href="" class="send">等待发货</a></td>-->
+            <td th:if="${order.orderStatus eq 0}">
+              <a class="send">未发货</a>
+            </td>
+            <td th:if="${order.orderStatus eq 1}">
+              <a th:href="@{protected/orderClient(method='toEditPage1',orderId=${order.orderId})}" style="color: orange">已发货</a>
+            </td>
+            <td th:if="${order.orderStatus eq 2}">
+              <a>已收货</a>
+            </td>
+            <td><a th:href="@{protected/orderClient(method='detailInformation',orderId=${order.orderId})}">查看详情</a></td>
+            <td><a th:href="@{protected/orderClient(method='toEditPage1',orderId=${order.orderId})}">修改</a></td>
+            <td><a th:href="@{protected/orderClient(method='removeOrder',orderId=${order.orderId})}">删除</a></td>
+          </tr>
+          </tbody>
+        </table>
+        <div class="footer">
+          <div class="footer-right">
+            <!--
+            <div><span th:onclick="|Page(1)|">首页</span></div>
+            <div><span th:onclick="|Page(${ session.pageNo -1})|">上一页</span></div>
+            <ul>
+              <li><span th:text="${session.pageNo -1}" th:hidden="${session.pageNo==1}"></span></li>
+              <li class="active"><span th:text="${session.pageNo}"></span></li>
+              <li><span th:text="${session.pageNo +1}" th:hidden="${session.pageNo==session.pageCount}"></span></li>
+            </ul>
+            <div> <span th:onclick="|Page(${session.pageNo+1})|">下一页</span></div>
+            <div><span th:onclick="|Page(${session.pageCount})|">末页</span></div>
+            <span>共</span><span th:text="${session.pageCount}"></span><span>页</span>
+            -->
+            <span>共</span><span th:text="${session.paCount}"></span><span>条记录</span>
+            <!--
+            <span>到第</span>
+            <input type="text" id="pageText" th:value="${session.pageNo}">
+            <span>页</span>
+            <button id="but" onclick="Jump()">确定</button>
+            -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom">
+      <div class="w">
+        <div class="top">
+          <ul>
+            <li>
+              <a href="">
+                <img src="static/img/bottom1.png" alt="" />
+                <span>大咖级讲师亲自授课</span>
+              </a>
+            </li>
+            <li>
+              <a href="">
+                <img src="static/img/bottom.png" alt="" />
+                <span>课程为学员成长持续赋能</span>
+              </a>
+            </li>
+            <li>
+              <a href="">
+                <img src="static/img/bottom2.png" alt="" />
+                <span>学员真是情况大公开</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="content">
+          <dl>
+            <dt>关于我们</dt>
+            <dd>教育理念</dd>
+            <!-- <dd>名师团队</dd>
+            <dd>学员心声</dd> -->
+          </dl>
+          <dl>
+            <dt>资源下载</dt>
+            <dd>视频下载</dd>
+            <!-- <dd>资料下载</dd>
+            <dd>工具下载</dd> -->
+          </dl>
+          <dl>
+            <dt>加入我们</dt>
+            <dd>招聘岗位</dd>
+            <!-- <dd>岗位介绍</dd>
+            <dd>招贤纳师</dd> -->
+          </dl>
+          <dl>
+            <dt>联系我们</dt>
+            <dd>https://www.drimwai.com</dd>
+            <dd></dd>
+          </dl>
+        </div>
+      </div>
+      <div class="down">
+        Drimwai's Bookstore.Copyright ©2021
+      </div>
+    </div>
+  </body>
+  <script>
+    var vue = new Vue({
+      el:"#app",
+      methods: {
+        checkPage() {
+          let limitedPageValue = parseInt(document.getElementById("limitedPage").value);
+          let inputPageValue = parseInt(document.getElementById("inputPage").value);
+
+          if (inputPageValue<=limitedPageValue) {
+            console.log("true,符合正则表达式要求");
+            //表单可以正常提交
+            document.getElementById("inputPageButton").disabled = false;
+          } else {
+            alert("页数不符合要求,请重新输入")
+            //清除输入框
+            document.getElementById("inputPage").value = "";
+            //表单不能提交(不能点击)
+            document.getElementById("inputPageButton").disabled = true;
+            console.log("false,不符合正则表达式要求")
+            //
+          }
+        }
+      },
+      mounted(){
+        console.log("进入了页面放啊")
+        document.getElementById("inputPage").value = "";
+
+      }
+    });
+  </script>
+</html>

@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>书城首页</title>
+    <base th:href="@{/}" href="/bookstore/"/>
+    <link rel="stylesheet" href="static/css/minireset.css" />
+    <link rel="stylesheet" href="static/css/common.css" />
+    <link rel="stylesheet" href="static/css/iconfont.css" />
+    <link rel="stylesheet" href="static/css/index.css" />
+    <link rel="stylesheet" href="static/css/swiper.min.css" />
+    <script src="static/script/vue.js"></script>
+    <!-- 引入vue -->
+    <script src="static/script/vue.js" type="text/javascript" charset="utf-8"></script>
+    <!-- 引入axios -->
+    <script src="static/script/axios.js" type="text/javascript" charset="utf-8"></script>
+
+  </head>
+  <body>
+    <div id="app">
+      <div class="topbar">
+        <div class="w">
+          <div class="topbar-left">
+            <i>送至:</i>
+            <i>北京</i>
+            <i class="iconfont icon-ai-arrow-down"></i>
+          </div>
+          <!--登录前的风格-->
+          <div class="topbar-right" th:if="${session.loginUser == null && session.registerUser == null}">
+            <a href="user?method=toLoginPage" class="login">登录</a>
+            <a href="user?method=toRegisterPage" class="register">注册</a>
+            <a
+                    href="protected/cart?method=toCartPage"
+                    class="cart iconfont icon-gouwuche
+            "
+            >
+              购物车
+              <div class="cart-num" v-text="totalCount">3</div>
+            </a>
+            <a href="protected/bookManager?method=toManagerPage" class="admin">后台管理</a>
+          </div>
+          <!--登录前的风格-->
+          <!--登录后风格-->
+          <div class="topbar-right" th:if="${session.loginUser != null}">
+            <span>欢迎你<b th:text="${session.loginUser.userName}">Drimwai</b></span>
+            <a href="user?method=logout" class="register">注销</a>
+            <a
+                    href="protected/cart?method=toCartPage"
+                    class="cart iconfont icon-gouwuche
+            ">
+              购物车
+              <div class="cart-num" v-text="totalCount">3</div>
+            </a>
+<!--            <a href="admin?method=toManagerPage" class="admin">后台管理</a>-->
+          </div>
+          <!--登录后风格-->
+          <!--注册成功后风格-->
+          <div class="topbar-right" th:if="${session.registerUser != null}">
+            <span>欢迎你<b th:text="${session.registerUser.userName}">Drimwai</b></span>
+            <a href="user?method=logout" class="register">注销</a>
+            <a
+                    href="protected/cart?method=toCartPage"
+                    class="cart iconfont icon-gouwuche
+            ">
+              购物车
+              <div class="cart-num" v-text="totalCount">3</div>
+            </a>
+<!--            <a href="admin?method=toManagerPage" class="admin">后台管理</a>-->
+          </div>
+          <!--注册成功后风格-->
+          <!--          管理员登录成功后风格-->
+          <div class="topbar-right" th:if="${session.loginAdmin != null}">
+            <span>欢迎你<b th:text="${session.loginAdmin.adminName}">Nick</b> </span>
+            <a href="admin?method=logout" class="register">注销</a>
+            <!--            <a-->
+            <!--                    href="protected/cart?method=toCartPage"-->
+            <!--                    class="cart iconfont icon-gouwuche">购物车-->
+            <!--                <div class="cart-num" v-text="totalCount">3</div>-->
+            <!--            </a>-->
+            <a href="protected/bookManager?method=toManagerPage" class="admin">后台管理</a>
+          </div>
+        </div>
+      <div>
+      <div class="header w">
+        <a href="#" class="header-logo"></a>
+        <div class="header-nav">
+          <ul>
+<!--            <li><a href="index.html">全部</a></li>-->
+            <li><a th:href="@{/index.html(pageIndex='1',category='%java%')}">java</a></li>
+            <li><a th:href="@{/index.html(pageIndex='1',category='%前端%')}">前端</a></li>
+            <li><a th:href="@{/index.html(pageIndex='1',category='%小说%')}">小说</a></li>
+            <li><a th:href="@{/index.html(pageIndex='1',category='%文学%')}" >文学</a></li>
+            <li><a th:href="@{/index.html(pageIndex='1',category='%青春文学%')}">青春文学</a></li>
+            <li><a th:href="@{/index.html(pageIndex='1',category='%艺术%')}">艺术</a></li>
+            <li><a th:href="@{/index.html(pageIndex='1',category='%管理%')}">管理</a></li>
+          </ul>
+        </div>
+        <div class="header-search">
+          <input type="text" placeholder="十万个为什么" />
+          <button class="iconfont icon-search"></button>
+        </div>
+      </div>
+      <div class="banner w clearfix">
+        <div class="banner-left">
+          <ul>
+            <li>
+              <a th:href="@{/index.html(pageIndex='1',category='%文学%',category2='%鉴赏%')}">
+                <span>文学 鉴赏</span>
+                <i class="iconfont icon-jiantou"></i>
+              </a>
+            </li>
+            <li>
+              <a th:href="@{/index.html(pageIndex='1',category='%社科%',category2='%研究%')}">
+                <span>社科 研究</span>
+                <i class="iconfont icon-jiantou"></i>
+              </a>
+            </li>
+            <li>
+              <a th:href="@{/index.html(pageIndex='1',category='%少儿%',category2='%培训%')}">
+                <span>少儿 培训</span>
+                <i class="iconfont icon-jiantou"></i>
+              </a>
+            </li>
+            <li>
+              <a th:href="@{/index.html(pageIndex='1',category='%艺术%',category2='%赏析%')}">
+                <span>艺术 赏析</span>
+                <i class="iconfont icon-jiantou"></i>
+              </a>
+            </li>
+            <li>
+              <a th:href="@{/index.html(pageIndex='1',category='%生活%',category2='%周边%')}">
+              <span>生活 周边</span>
+              <i class="iconfont icon-jiantou"></i>
+              </a>
+            </li>
+            <li>
+              <a th:href="@{/index.html(pageIndex='1',category='%文教%',category2='%科技%')}">
+                <span>文教 科技</span>
+                <i class="iconfont icon-jiantou"></i>
+              </a>
+            </li>
+            <li>
+              <a th:href="@{/index.html(pageIndex='1',category='%热销%',catregory2='%畅读%')}">
+                <span>热销 畅读</span>
+                <i class="iconfont icon-jiantou"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="banner-right">
+          <div class="swiper-container">
+            <ul class="swiper-wrapper">
+              <li class="swiper-slide">
+                <img src="static/uploads/banner4.jpg" alt="">
+                <!-- <div class="banner-img"></div> -->
+              </li>
+              <li class="swiper-slide">
+                <img src="static/uploads/banner5.jpg" alt="">
+                <!-- <div class="banner-img"></div> -->
+              </li>
+              <li class="swiper-slide">
+                <img src="static/uploads/banner6.jpg" alt="">
+                <!-- <div class="banner-img"></div> -->
+              </li>
+            </ul>
+            <div class="swiper-button-prev"></div>
+
+            <div class="swiper-button-next"></div>
+
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+          </div>
+        </div>
+      </div>
+      <div class="books-list ">
+        <div class="w">
+          <div class="list">
+            <div class="list-header">
+              <div class="title">图书列表</div>
+<!--              <form action="index.html" method="get" th:unless="${totalCount==0 || totalCount<=10}">-->
+<!--                <div class="price-search">-->
+<!--                  <span>价格:</span>-->
+<!--                  <input type="text" name="lowerPrice" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" required>-->
+<!--                  <span>元-</span>-->
+<!--                  <input type="text" name="higherPrice" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" required>-->
+<!--                  <span>元</span>-->
+<!--                  <button type="submit">查询</button>-->
+<!--                </div>-->
+<!--              </form>-->
+              <div class="price-search">
+                <span>价格:</span>
+                <input type="text">
+                <span>-元</span>
+                <input type="text">
+                <span>元</span>
+                <button>查询</button>
+              </div>
+            </div>
+            <div class="list-content" th:if="${#lists.isEmpty(list)}">
+              图书列表为空，无法进行购买!!!
+            </div>
+            <div class="list-content" th:unless="${#lists.isEmpty(list)}">
+              <div class="list-item" th:each="book : ${list}">
+                <img src="static/uploads/huozhe.jpg" th:src="${book.imgPath}" alt="">
+                <p><span>书名:</span><span th:text="${book.bookName}">活着</span></p>
+                <p><span>作者:</span><span th:text="${book.author}">余华</span></p>
+                <p><span>价格:</span><span th:text="${book.price}">￥66.6</span></p>
+                <p><span>销量:</span><span th:text="${book.sales}">230</span></p>
+                <p><span>库存:</span><span th:text="${book.stock}">1000</span></p>
+                <button @click="addBookToCart()" th:value="${book.bookId}">加入购物车</button>
+              </div>
+            </div>
+          </div>
+
+            <form th:action="@{/index.html}" method="get" th:unless="${totalCount==0 || totalCount<=10}">
+              <div class="list-footer">
+                <!--隐藏的表单元素,默认值为1,默认当前页号为第一页-->
+                <!--<input type="hidden" name="pageIndex" value="1"/>-->
+                <div><a th:if="${currentPageNo!=1}" th:href="@{/index.html(pageIndex='1',searchBookName=${searchBookName},lowerPrice=${lowerPrice},higherPrice=${higherPrice},category=${category})}">首页</a><span th:if="${currentPageNo==1}">首页</span></div>
+                <div><a th:if="${currentPageNo!=1}" th:href="@{/index.html(pageIndex=${currentPageNo-1},searchBookName=${searchBookName},lowerPrice=${lowerPrice},higherPrice=${higherPrice},category=${category})}">上一页</a><span th:if="${currentPageNo==1}">上一页</span></div>
+
+                <div><a th:if="${currentPageNo}<${totalPageCount}" th:href="@{/index.html(pageIndex=${currentPageNo+1},searchBookName=${searchBookName},lowerPrice=${lowerPrice},higherPrice=${higherPrice},category=${category})}">下一页</a><span th:if="${currentPageNo}>=${totalPageCount}">下一页</span></div>
+                <div><a th:if="${currentPageNo}<${totalPageCount}" th:href="@{/index.html(pageIndex=${totalPageCount},searchBookName=${searchBookName},lowerPrice=${lowerPrice},higherPrice=${higherPrice},category=${category})}">末页</a><span th:if="${currentPageNo}>=${totalPageCount}">末页</span></div>
+                <span th:text="'当前'+${currentPageNo}+'/'+${totalPageCount}+'页'"></span>
+                <span th:text="'共'+${totalCount}+'本书'"></span>
+                <span>到第</span>
+                <input type="text" name="inputPage"  id="inputPage" th:value="${inputPage}" @keyup="checkPage()">
+                <input type="hidden" name="pageIndex" th:value="${currentPageNo}">
+                <input type="hidden" name="searchBookName" th:value="${searchBookName}">
+                <input type="hidden" name="lowerPrice" th:value="${lowerPrice}">
+                <input type="hidden" name="higherPrice" th:value="${higherPrice}">
+                <input type="hidden" name="category" th:value="${category}">
+                <span>页</span>
+                <button type="submit" id="inputPageButton">确定</button>
+              </div>
+            </form>
+<!--            &lt;!&ndash;用于存储后端值供前端读取的隐藏表单&ndash;&gt;-->
+<!--            <input type="hidden" id="limitedPage" th:value="${totalPageCount}">-->
+          </div>
+        </div>
+<!--      </div>-->
+
+
+<!--            <div class="list-footer">-->
+<!--                <div>首页</div>-->
+<!--                <div>上一页</div>-->
+<!--                <ul><li class="active">1</li><li>2</li><li>3</li></ul>-->
+<!--                <div>下一页</div>-->
+<!--                <div>末页</div>-->
+<!--                <span>共10页</span>-->
+<!--                <span>30条记录</span>-->
+<!--                <span>到第</span>-->
+<!--                <input type="text">-->
+<!--                <span>页</span>-->
+<!--                <button>确定</button>-->
+<!--            </div>-->
+      <!--    进行页面的分页       -->
+
+<!--          </div>-->
+<!--        </div>-->
+       
+<!--      </div>-->
+      <div class="cate w">
+        <div class="list">
+          <a href="" class="list-item">
+            <i class="iconfont icon-java"></i>
+            <span>java</span>
+          </a>
+          <a href="" class="list-item"
+          ><i class="iconfont icon-h5"></i>h5</a
+          >
+          <a href="" class="list-item">
+            <i class="iconfont icon-python"></i>python
+          </a>
+          <a href="" class="list-item"
+          ><i class="iconfont icon-tianchongxing-"></i>pm</a
+          >
+          <a href="" class="list-item"
+          ><i class="iconfont icon-php_elephant"></i>php</a
+          >
+          <a href="" class="list-item"
+          ><i class="iconfont icon-go"></i>go</a
+          >
+        </div>
+        <a href="" class="img">
+          <img src="static/uploads/cate4.jpg" alt="" />
+        </a>
+        <a href="" class="img">
+          <img src="static/uploads/cate5.jpg" alt="" />
+        </a>
+        <a href="" class="img">
+          <img src="static/uploads/cate6.jpg" alt="" />
+        </a>
+      </div>
+      <div class="books">
+        <div class="w">
+          <div class="seckill">
+            <div class="seckill-header">
+              <div class="title">
+                图书秒杀
+              </div>
+              <!-- <i class="iconfont icon-huanyipi"></i> -->
+            </div>
+            <div class="seckill-content">
+             
+                  <a href="" class="tip"> 
+                     <h5>距离结束还有</h5>
+                     <i class="iconfont icon-shandian"></i>
+                     <div class="downcount">
+                      <span class="time">00</span>
+                      <span class="token">:</span>
+                      <span class="time">00</span>
+                      <span class="token">:</span>
+                      <span class="time">00</span>
+                     </div>
+                  </a>
+              
+              
+                  <a href="" class="books-sec">
+                    <img src="static/uploads/congwanqingdaominguo.jpg" alt="">
+                    <p>从晚清到民国</p>
+                    <div>
+                      <span class="cur-price">￥28.9</span>
+                      <span class="pre-price">￥36.5</span>
+                    </div>
+                    <button>立即购买</button>
+                  </a>
+                  <a href="" class="books-sec">
+                    <img src="static/uploads/cyuyanrumenjingdian.jpg" alt="">
+                    <p>c语言入门经典</p>
+                    <div>
+                      <span class="cur-price">￥55.9</span>
+                      <span class="pre-price">￥68.5</span>
+                    </div>
+                    <button>立即购买</button>
+                  </a>
+                  <a href="" class="books-sec">
+                    <img src="static/uploads/fusang.jpg" alt="">
+                    <p>扶桑</p>
+                    <div>
+                      <span class="cur-price">￥30.9</span>
+                      <span class="pre-price">￥47.5</span>
+                    </div>
+                    <button>立即购买</button>
+                  </a>
+                  <a href="" class="books-sec">
+                    <img src="static/uploads/geihaizideshi.jpg" alt="">
+                    <p>给孩子的诗</p>
+                    <div>
+                      <span class="cur-price">￥18.9</span>
+                      <span class="pre-price">￥25.5</span>
+                    </div>
+                    <button>立即购买</button>
+                  </a>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bottom">
+        <div class="w">
+          <div class="top">
+            <ul>
+              <li>
+                <a href="">
+                  <img src="static/img/bottom1.png" alt="">
+                  <span>大咖级讲师亲自授课</span>
+                </a>
+              </li>
+              <li>
+                <a href="">
+                  <img src="img/bottom.png" alt="">
+                  <span>课程为学员成长持续赋能</span>
+                </a>
+              </li>
+              <li>
+                <a href="">
+                  <img src="static/img/bottom2.png" alt="">
+                  <span>学员真是情况大公开</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="content">
+            <dl>
+              <dt>关于我们</dt>
+              <dd>教育理念</dd>
+              <!-- <dd>名师团队</dd>
+              <dd>学员心声</dd> -->
+            </dl>
+            <dl>
+              <dt>资源下载</dt>
+              <dd>视频下载</dd>
+              <!-- <dd>资料下载</dd>
+              <dd>工具下载</dd> -->
+            </dl>
+            <dl>
+              <dt>加入我们</dt>
+              <dd>招聘岗位</dd>
+              <!-- <dd>岗位介绍</dd>
+              <dd>招贤纳师</dd> -->
+            </dl>
+            <dl>
+              <dt>联系我们</dt>
+              <dd>https://www.drimwai.com<dd>
+            </dl>
+          </div>
+        </div>
+        <div class="down">
+          Drimwai's Bookstore.Copyright ©2021
+        </div>
+      </div>
+
+     <script>
+       var vue = new Vue({
+         el:"#app",
+         data:{
+           totalCount:0
+         },
+         methods:{
+           // checkPage() {
+           //   //alert("checkPage方法调用")
+           //   let limitedPageValue = parseInt(document.getElementById("limitedPage").value);
+           //   let inputPageValue = parseInt(document.getElementById("inputPage").value);
+           //
+           //   if (inputPageValue<=limitedPageValue) {
+           //     console.log("true,符合正则表达式要求");
+           //     //表单可以正常提交
+           //     document.getElementById("inputPageButton").disabled = false;
+           //   } else {
+           //     alert("页数不符合要求,请重新输入")
+           //     //清除输入框
+           //     document.getElementById("inputPage").value = "";
+           //     //表单不能提交(不能点击)
+           //     document.getElementById("inputPageButton").disabled = true;
+           //     console.log("false,不符合正则表达式要求")
+           //     //
+           //   }
+           // },
+
+           addBookToCart(){
+             //获取bookId: bookId绑定在当前标签的value属性上
+             //event.target就表示拿到当前标签
+             var bookId = event.target.value;
+             //发送异步请求:添加书进购物车
+             axios({
+               method:"POST",
+               url:"protected/cart",
+               params:{
+                 method:"addCartItem",
+                 id:bookId
+               }
+             }).then(response => {
+               if (response.data.flag) {
+               //添加购物车成功
+               this.totalCount = response.data.resultData
+               alert("添加购物车成功")
+             } else {
+               if (response.data.message == "unLogin") {
+                 location.href = "user?method=toLoginPage"
+               } else {
+                 //说明显示购物车信息失败
+                 alert("显示购物车信息失败")
+               }
+             }
+           })
+         },
+         created() {
+           //获取购物车中的商品总数，并赋值给数据模型totalcount
+           //每次刷新都会走这个钩子函数
+           //发送异步请求，获取购物车的商品总数，并且将商品总数赋给this.totalCount
+           axios({
+             method: "post",
+             url: "cart",
+             params: {
+               method: "getTotalCount"
+             }
+           }).then(response => {
+             if (response.data.flag) {
+               this.totalCount = response.data.resultData;
+               console.log("刷新商品总数成功!")
+             } else {
+               if (response.data.message != "unLogin") {
+                 layer.msg("获取购物车商品失败");
+               }
+             }
+           })
+         }
+         },
+         mounted(){
+           console.log("进入了页面放啊")
+           document.getElementById("inputPage").value = "";
+         }
+       })
+     </script>
+
+    </div>
+    <script src="static/script/swiper.min.js"></script>
+    <script>
+      var swiper = new Swiper('.swiper-container', {
+        autoplay: true,
+        pagination: {
+          el: '.swiper-pagination',
+          dynamicBullets: true
+        },
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev'
+        }
+      })
+
+    </script>
+  </body>
+</html>
